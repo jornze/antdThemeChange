@@ -1,58 +1,40 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Breadcrumb, Affix, Button,Input} from 'antd';
 import "./style/layout/layout.css"
-
+import Sidercomponent from './components/layout/sider'
 import ThemePicker from './components/widget/ThemePicker'
-const { Header, Content, Footer, Sider } = Layout;
-const SubMenu = Menu.SubMenu;
+const { Header, Content, Footer } = Layout;
 
 class App extends React.Component {
   state = {
-    collapsed: false,
-    mode: 'inline',
-  };
-  onCollapse = (collapsed) => {
-    console.log(collapsed);
-    this.setState({
-      collapsed,
-      mode: collapsed ? 'vertical' : 'inline',
-    });
+    themeSwitch:true, //主题开关
+    background:'#112E4F',
+   
   }
-  render() {
+  bgchange=(color)=>{
+    this.setState({
+      background:color
+    });
+    console.log(color);
+  }
+  ThemeChangeBtn=()=>{ //自定义主题按钮
+    this.setState({
+      themeSwitch:!this.state.themeSwitch
+     
+    })
+    console.log(this.state.themeSwitch)
+  }
+  
+  render(props) {
     return (
-      <Layout className='layoutBd'>
-        <Sider
-          collapsible
-          collapsed={this.state.collapsed}
-          onCollapse={this.onCollapse}
-        >
-          <div className="logo" />
-          <Menu theme="dark" mode={this.state.mode} defaultSelectedKeys={['6']}>
-            <SubMenu
-              key="sub1"
-              title={<span><Icon type="user" /><span className="nav-text">User</span></span>}
-            >
-              <Menu.Item key="1">Tom</Menu.Item>
-              <Menu.Item key="2">Bill</Menu.Item>
-              <Menu.Item key="3">Alex</Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="sub2"
-              title={<span><Icon type="team" /><span className="nav-text">Team</span></span>}
-            >
-              <Menu.Item key="4">Team 1</Menu.Item>
-              <Menu.Item key="5">Team 2</Menu.Item>
-            </SubMenu>
-            <Menu.Item key="6">
-              <span>
-                <Icon type="file" />
-                <span className="nav-text">File</span>
-              </span>
-            </Menu.Item>
-          </Menu>
-        </Sider>
+      <Layout className='layoutBd' >
+       {/*左侧菜单栏*/}
+        <Sidercomponent //bgColor={this.state.background}
+        ></Sidercomponent>
+
         <Layout>
-          <Header  />
+          <Header  /*style={{'background':this.state.background}}*/
+          />
           <Content style={{ margin: '0 16px' }}>
             <Breadcrumb style={{ margin: '12px 0' }}>
               <Breadcrumb.Item>User</Breadcrumb.Item>
@@ -60,13 +42,21 @@ class App extends React.Component {
             </Breadcrumb>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
               Bill is a cat.
+              <Button>
+                按钮
+              </Button>
+              <Input></Input>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            Ant Design ©2016 Created by Ant UED
+            浙江省杭州市强凌科技有限公司@2018
           </Footer>
         </Layout>
-        <ThemePicker></ThemePicker>
+        <Affix style={{position:'absolute',top:'11%',right:'20px'}} onClick={()=>{this.ThemeChangeBtn()}}>
+          <Button type="primary">自定义主题</Button>
+        </Affix>
+        <ThemePicker themeSwitch={this.state.themeSwitch} //background={this.state.background} 
+        changecolor={(color)=>{this.bgchange(color)}}></ThemePicker>
       </Layout>
       
     );

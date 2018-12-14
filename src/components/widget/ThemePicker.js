@@ -1,23 +1,31 @@
 import React from 'react';
 import {SketchPicker} from 'react-color'
 class ThemePicker extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
-            backgroundColor:"#fff"
+            background: localStorage.getItem('@primary-color') || '#313653',
         }
+      
     }
     handleChangeComplete = (color) => {
-        this.setState({ backgroundColor: color.hex });
-        console.log(this.state.backgroundColor);
-        localStorage.setItem('@primary-color', color.hex);
-        window.less.modifyVars({
-            '@primary-color': color.hex,
-        })
+       this.props.changecolor(color.hex);
+       this.setState({
+        background:color.hex
+       })
+       localStorage.setItem('@primary-color', color.hex);
+       window.less.modifyVars({
+        '@primary-color': color.hex,
+    })
+    .then(() => { })
+    .catch(error => {
+        console.log(`Failed to update theme`);
+    });
+
       };
     render() {
-        return <SketchPicker 
-        color={ this.state.backgroundColor }
+        return <SketchPicker className={this.props.themeSwitch?"displayNone themepicker":"themepicker"}
+        color={this.state.background}
         onChangeComplete={ this.handleChangeComplete }/>
       }
 }
